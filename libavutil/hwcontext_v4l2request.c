@@ -134,11 +134,11 @@ static const struct {
     { V4L2_PIX_FMT_NV12_32L32, AV_PIX_FMT_YUV420P, DRM_FORMAT_NV12, DRM_FORMAT_MOD_ALLWINNER_TILED, 8 },
 #endif
 #if defined(V4L2_PIX_FMT_NV15) && defined(DRM_FORMAT_NV15)
-    { V4L2_PIX_FMT_NV15, AV_PIX_FMT_YUV420P10, DRM_FORMAT_NV15, DRM_FORMAT_MOD_LINEAR, 10 },
+    { V4L2_PIX_FMT_NV15, AV_PIX_FMT_NV15, DRM_FORMAT_NV15, DRM_FORMAT_MOD_LINEAR, 10 },
 #endif
     { V4L2_PIX_FMT_NV16, AV_PIX_FMT_NV16, DRM_FORMAT_NV16, DRM_FORMAT_MOD_LINEAR, 8 },
 #if defined(V4L2_PIX_FMT_NV20) && defined(DRM_FORMAT_NV20)
-    { V4L2_PIX_FMT_NV20, AV_PIX_FMT_YUV422P10, DRM_FORMAT_NV20, DRM_FORMAT_MOD_LINEAR, 10 },
+    { V4L2_PIX_FMT_NV20, AV_PIX_FMT_NV20BS, DRM_FORMAT_NV20, DRM_FORMAT_MOD_LINEAR, 10 },
 #endif
 #if defined(V4L2_PIX_FMT_P010) && defined(DRM_FORMAT_P010)
     { V4L2_PIX_FMT_P010, AV_PIX_FMT_P010, DRM_FORMAT_P010, DRM_FORMAT_MOD_LINEAR, 10 },
@@ -1154,8 +1154,7 @@ static int v4l2request_transfer_get_formats(AVHWFramesContext *hwfc,
     fmts[1] = AV_PIX_FMT_NONE;
 
     if (hwfc->sw_format == AV_PIX_FMT_YUV420P ||
-        hwfc->sw_format == AV_PIX_FMT_YUV420P10 ||
-        hwfc->sw_format == AV_PIX_FMT_YUV422P10)
+        hwfc->sw_format == AV_PIX_FMT_YUV420P10)
         fmts[0] = AV_PIX_FMT_NONE;
 
     *formats = fmts;
@@ -1203,8 +1202,7 @@ static int v4l2request_map_from(AVHWFramesContext *hwfc, AVFrame *dst,
 
     if (hwfc->sw_format == AV_PIX_FMT_NONE ||
         hwfc->sw_format == AV_PIX_FMT_YUV420P ||
-        hwfc->sw_format == AV_PIX_FMT_YUV420P10 ||
-        hwfc->sw_format == AV_PIX_FMT_YUV422P10)
+        hwfc->sw_format == AV_PIX_FMT_YUV420P10)
         return AVERROR(ENOSYS);
     else if (dst->format == AV_PIX_FMT_NONE)
         dst->format = hwfc->sw_format;

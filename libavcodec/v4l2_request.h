@@ -49,6 +49,10 @@ typedef struct V4L2RequestContext {
     enum v4l2_buf_type output_type;
     AVMutex mutex;
     V4L2RequestBuffer output[4];
+    uint8_t next_output;
+    uint32_t queued_output;
+    uint32_t queued_request;
+    uint64_t queued_capture;
     int (*post_probe)(AVCodecContext *avctx);
 } V4L2RequestContext;
 
@@ -77,5 +81,28 @@ int ff_v4l2_request_uninit(AVCodecContext *avctx);
 int ff_v4l2_request_init(AVCodecContext *avctx,
                          uint32_t pixelformat, uint32_t buffersize,
                          struct v4l2_ext_control *control, int count);
+
+uint64_t ff_v4l2_request_get_capture_timestamp(AVFrame *frame);
+
+int ff_v4l2_request_append_output(AVCodecContext *avctx,
+                                  V4L2RequestPictureContext *pic,
+                                  const uint8_t *data, uint32_t size);
+
+int ff_v4l2_request_decode_slice(AVCodecContext *avctx,
+                                 V4L2RequestPictureContext *pic,
+                                 struct v4l2_ext_control *control, int count,
+                                 bool first_slice, bool last_slice);
+
+int ff_v4l2_request_decode_frame(AVCodecContext *avctx,
+                                 V4L2RequestPictureContext *pic,
+                                 struct v4l2_ext_control *control, int count);
+
+int ff_v4l2_request_reset_picture(AVCodecContext *avctx,
+                                  V4L2RequestPictureContext *pic);
+
+int ff_v4l2_request_start_frame(AVCodecContext *avctx,
+                                V4L2RequestPictureContext *pic, AVFrame *frame);
+
+void ff_v4l2_request_flush(AVCodecContext *avctx);
 
 #endif /* AVCODEC_V4L2_REQUEST_H */

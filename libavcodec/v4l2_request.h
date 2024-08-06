@@ -49,6 +49,7 @@ typedef struct V4L2RequestContext {
     enum v4l2_buf_type output_type;
     AVMutex mutex;
     V4L2RequestBuffer output[4];
+    int (*post_probe)(AVCodecContext *avctx);
 } V4L2RequestContext;
 
 typedef struct V4L2RequestPictureContext {

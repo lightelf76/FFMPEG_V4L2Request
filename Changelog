@@ -34,6 +34,7 @@ version 8.1:
 - LCEVC parser
 - LCEVC enhancement layer exporting in MPEG-TS
 - Extend AMF Color Converter (vf_vpp_amf) HDR capabilities
+- V4L2 Request API stateless decoder support
 
 
 version 8.0:
